@@ -6,4 +6,4 @@ app = FastAPI()
 
 @app.get("/info")
 def get_info():
-    return {"data":"some info to poetry from schedule........"}
+    return {"data":"some info to poetry from schedule"}
