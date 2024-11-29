@@ -2,7 +2,7 @@
 services:
   user:
     build: ./server/user
-    container_name: userapp
+    container_name: userapp_container
     ports:
       - 8000:8000
 
@@ -11,9 +11,9 @@ services:
 
   schedule:
     build: ./server/schedule
-    container_name: scheduleapp
+    container_name: scheduleapp_container
     ports:
-      - 8080:8080
+      - 8001:8001
 
     volumes:
       - ./server/schedule:/app
@@ -31,7 +31,14 @@ services:
 
   rabbitmq:
     image: rabbitmq:3.10.7-management
+    container_name: rabbitmq_container
     ports:
       - 15672:15672
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
+    ports: 
+      - 8080:8080
 
     
