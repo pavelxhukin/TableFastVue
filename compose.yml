@@ -1,22 +1,24 @@
 
 services:
-  user:
+  user_api:
     build: ./server/user
-    container_name: userapp_container
+    container_name: user_api
     ports:
       - 8000:8000
-
     volumes:
       - ./server/user:/app
+    networks:
+      - internal
 
-  schedule:
+  api:
     build: ./server/schedule
-    container_name: scheduleapp_container
-    ports:
-      - 8001:8001
-
+    container_name: api
+    expose:
+      - 4000
     volumes:
       - ./server/schedule:/app
+    networks:
+      - internal
 
   postgres:
     image: postgres:latest
@@ -27,20 +29,39 @@ services:
       POSTGRES_DB: postgres_db
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - "5430:5432"
+      - 5430:5432
+    networks:
+      - internal
 
   rabbitmq:
     image: rabbitmq:3.10.7-management
     container_name: rabbitmq_container
     ports:
       - 15672:15672
+    networks:
+      - internal
 
   nginx:
     image: nginx:latest
     container_name: nginx_container
     ports: 
-      - 8080:8080
+      - 80:80
     volumes:
-      - ./html:/usr/share/nginx/html
+      - ./html/index.html:/usr/share/nginx/html/index.html
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on: 
+      - api
+      - user_api
+    links:
+      - api:api
+      - user_api:user_api
+    networks:
+      - internal
+
+  
+networks:
+  internal:
+    name: internal
+    driver: overlay
 
     
