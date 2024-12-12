@@ -3,3 +3,4 @@ server/user/__pycache__
 server/schedule/venv
 server/schedule/__pycache__
 .vscode
+.env
