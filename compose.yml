@@ -14,9 +14,15 @@ services:
     build: ./server/schedule
     container_name: api
     expose:
-      - 4000
+      - ${APP_HOST_PORT}:4000
+    depends_on:
+      - postgres
     volumes:
       - ./server/schedule:/app
+    restart: 
+      always
+    env_file:
+      - .env
     networks:
       - internal
 
@@ -24,12 +30,16 @@ services:
     image: postgres:latest
     container_name: postgres_container
     environment:
-      POSTGRES_USER: postgres_user
-      POSTGRES_PASSWORD: postgres_password
-      POSTGRES_DB: postgres_db
+      POSTGRES_USER: ${POSTGRES_DB_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
+      POSTGRES_DB: database
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - 5430:5432
+      - ${POSTGRESS_DB_HOST_PORT}:5432
+    volumes:
+      - .postgres:/var/lib/postgres/data
+    restart:
+      always
     networks:
       - internal
 
