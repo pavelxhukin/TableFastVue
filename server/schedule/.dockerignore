@@ -1,2 +1,5 @@
 venv
 README.md
+schedule
+tests
+__pycache__

@@ -1,42 +1,54 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
+from typing import List, Annotated
+import models
+from database import engine, SessionLocal
+from sqlalchemy.orm import Session
+from producer import produce_message
+
+message = "hello from main.py"
 
 app = FastAPI()
+models.Base.metadata.create_all(bind=engine)
 
-classes = [ 
-    {
-        "id" : 1 ,
-        "title" : "Math",
-        "type" : "lection",
-    },
-    {
-        "id" : 2 ,
-        "title" : "Phisics",
-        "type" : "Practic text"
-    }
-]
-
-@app.get("/classes", tags=["Занятия"],summary=["получить все занятия"])
-def get_classes():
-    return classes
+class LessonBase(BaseModel):
+    subject_name: str
+    
+class RoomBase(BaseModel):
+    room_number: int
+    lessons: List[LessonBase]
 
 
-@app.get("/classes/{class_id}", tags=["Занятия"],summary=["получить конкретнуя книгу"])
-def get_class(class_id: int):
-    for element in classes:
-        if element["id"] == class_id:
-            return element
-    return {"404":"видимо такой книги нет"}
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+db_dependency = Annotated[Session, Depends(get_db)]
+
+# @app.get("/send")
+# async def send_message():
+#     produce_message(message)
+#     return "connections send"
+
+@app.get("/table")
+async def get_table(db: db_dependency):
+    result = db.query(models.Lessons).all()
+    if not result:
+        raise HTTPException(status_code=404, detail='there is no lessons in db')
+    return result
 
 
-class NewClass(BaseModel):
-    title: str
-    type: str
+@app.post("/table")
+async def create_table(room: RoomBase, db: db_dependency):
+    db_room = models.Rooms(room_number=room.room_number)
+    db.add(db_room)
+    db.commit()
+    db.refresh(db_room)
+    for lesson in room.lessons:
+        db_lesson = models.Lessons(subject_name=lesson.subject_name, room_id=db_room.id)
+        db.add(db_lesson)
+    db.commit()
 
-@app.post("/classes")
-def create_class(new_class: NewClass):
-    classes.append({
-        "id": len(classes) + 1,
-        "title": new_class.title,
-        "type": new_class.type,
-    })

@@ -1,19 +1,19 @@
 
 services:
-  user_api:
-    build: ./server/user
-    container_name: user_api
-    ports:
-      - 8000:8000
-    volumes:
-      - ./server/user:/app
-    networks:
-      - internal
+  # user_api:
+  #   build: ./server/user
+  #   container_name: user_api
+  #   ports:
+  #     - 8000:8000
+  #   volumes:
+  #     - ./server/user:/app
+  #   networks:
+  #     - internal
 
   api:
     build: ./server/schedule
     container_name: api
-    expose:
+    ports:
       - ${APP_HOST_PORT}:4000
     depends_on:
       - postgres
@@ -21,21 +21,21 @@ services:
       - ./server/schedule:/app
     restart: 
       always
-    env_file:
-      - .env
     networks:
       - internal
+    # env_file:
+    #   - .env
 
   postgres:
     image: postgres:latest
     container_name: postgres_container
-    environment:
-      POSTGRES_USER: ${POSTGRES_DB_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
-      POSTGRES_DB: database
-      PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - ${POSTGRESS_DB_HOST_PORT}:5432
+      - 5432:5432
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - .postgres:/var/lib/postgres/data
     restart:
@@ -43,35 +43,47 @@ services:
     networks:
       - internal
 
-  rabbitmq:
-    image: rabbitmq:3.10.7-management
-    container_name: rabbitmq_container
-    ports:
-      - 15672:15672
-    networks:
-      - internal
+  # rabbitmq:
+  #   image: rabbitmq:4.0-management-alpine
+  #   hostname: rabbitmq
+  #   restart: always
+  #   container_name: rabbitmq
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: "rmuser"
+  #     RABBITMQ_DEFAULT_PASS: "rmpassword"
+  #     RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648"
+  #   volumes:
+  #     - rabbitmq-data:/var/lib/rabbitmq
+  #   networks:
+  #     - internal
 
-  nginx:
-    image: nginx:latest
-    container_name: nginx_container
-    ports: 
-      - 80:80
-    volumes:
-      - ./html/index.html:/usr/share/nginx/html/index.html
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-    depends_on: 
-      - api
-      - user_api
-    links:
-      - api:api
-      - user_api:user_api
-    networks:
-      - internal
+#   nginx:
+#     image: nginx:latest
+#     container_name: nginx_container
+#     ports: 
+#       - 80:80
+#     volumes:
+#       - ./html/index.html:/usr/share/nginx/html/index.html
+#       - ./nginx/conf.d/:/etc/nginx/conf.d/
+#     depends_on: 
+#       - api
+#       - user_api
+#     links:
+#       - api:api
+#       - user_api:user_api
+#     networks:
+#       - internal
+
+# volumes:
+#   rabbitmq-data:
 
   
 networks:
   internal:
-    name: internal
-    driver: overlay
+    driver: brige
+    attachable: true
 
     
