@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nginx</title>
+    <link rel='stylesheet' href="{{url_for('static', filename='styles/style.css')}}">
+    <title>Title</title>
 </head>
-<body>
-    <h2>Hello from nginx container...!</h2>
-</body>
+    <body>
+        <header>
+            <div class='title'>ScHeDule</div>
+        </header>
+        <section>
+            <div class="schedule-container">
+                <div class="schedule-header">
+                    {% for time in time_slots %}
+                        <div class="time">{{ time }}</div>
+                    {% endfor %}
+                </div>
+                <div class="schedule-body">
+                    {% for day in days_of_week %}
+                        <div class="day-header">{{ day }}</div>
+                        {% for time in time_slots %}
+                            <div class="event-cell">
+                            {% if schedule_data and schedule_data[day] %}
+                                {% for event in schedule_data[day] %}
+                                   {% if event.time == time %}
+                                        <div class="event">{{ event.title }} ({{ event.cabinet }})</div>
+                                        {% if event.now %}
+                                            <div class="event now">{{ event.title }} ({{ event.cabinet }})</div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                           {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </body>
 </html>

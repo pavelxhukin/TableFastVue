@@ -10,7 +10,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock /app/
 RUN poetry install --no-root --no-dev
 
-COPY main.py models.py database.py /app/
+COPY main.py models.py database.py producer.py /app/
 
 
 EXPOSE 4000

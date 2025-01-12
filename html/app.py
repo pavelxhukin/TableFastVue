@@ -1,23 +1,10 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+@app.route('/?')
+def schedule_view():
+    time_slots = ['09:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-13:00', '13:00-14:00', '14:00-15:00']
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
-app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
-)
-
-@app.get("/")
-async def get_hi():
-    return 'hello from user app'
-
-@app.get("/tables")
-async def get_tables():
-    return {
+    schedule_data = {
         'Monday': [
             {'time': '09:00-10:00', 'title': 'Математика', 'cabinet': '101', 'now': True}
         ],
@@ -33,4 +20,10 @@ async def get_tables():
               {'time': '09:00-10:00', 'title': 'Английский язык', 'cabinet': '107'},
               {'time': '13:00-14:00', 'title': 'История', 'cabinet': '110'}
           ]
-      }
+    }
+
+
+    return render_template('index.html',
+                            time_slots=time_slots,
+                            days_of_week=days_of_week,
+                            schedule_data=schedule_data)
