@@ -10,10 +10,11 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock /app/
 RUN poetry install --no-root --no-dev
 
-COPY main.py models.py database.py producer.py /app/
-
+COPY main.py models.py database.py http_client.py /app/
 
 EXPOSE 4000
 
 CMD ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4000", "--reload"]
+
+
 

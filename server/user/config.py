@@ -18,6 +18,3 @@ connection_params = pika.ConnectionParameters(
 
 async def get_connection() -> pika.BlockingConnection:
     return await aio_pika.connect_robust(connection_params)
-
-
-
