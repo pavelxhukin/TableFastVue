@@ -12,6 +12,8 @@ services:
       - ./server/user:/app
     networks:
       - internal
+    env_file:
+      - .env
 
   api:
     build: 
@@ -28,8 +30,8 @@ services:
       always
     networks:
       - internal
-    # env_file:
-    #   - .env
+    env_file:
+      - .env
 
   postgres:
     image: postgres:latest

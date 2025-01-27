@@ -10,8 +10,10 @@ WORKDIR /app
 COPY server/schedule/pyproject.toml server/schedule/poetry.lock /app/
 RUN poetry install --no-root --no-dev
 
-COPY server/dbSettings/* /app/
+COPY server/dbSettings/* /
 COPY server/schedule/main.py server/schedule/http_client.py /
+
+
 
 EXPOSE 4000
 

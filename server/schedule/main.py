@@ -1,6 +1,4 @@
-import json
-import uuid
-import asyncio
+
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -11,11 +9,9 @@ from models import *
 import models
 #----#
 from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError
 from sqlalchemy.orm import Session
-from datetime import datetime, timedelta, timezone
 from typing import Optional, List
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated
