@@ -6,10 +6,11 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:$PATH"
 WORKDIR /app
 
-COPY pyproject.toml poetry.lock /app/
+COPY server/user/pyproject.toml server/user/poetry.lock /app/
 RUN poetry install --no-root --no-dev
 
-COPY main.py database.py models.py /app/
+COPY server/dbSettings/* /app/
+COPY server/user/main.py /
 
 EXPOSE 8000
 
