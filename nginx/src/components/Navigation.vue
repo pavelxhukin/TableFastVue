@@ -32,11 +32,7 @@ const { userData : username } = storeToRefs(UserStore)
 async function onButtonClick(){
   if (UserStore.userData.name){
     try{ 
-      const data = await axios.get('http://localhost:4000/exit/', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-      });
+      const { data } = await apiService.JWTget("/exit/",localStorage.getItem('token'));
     }catch(error){
       console.error(error)
     }

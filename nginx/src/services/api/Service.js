@@ -1,15 +1,21 @@
 export class ApiService {
     #axios;
-
+    #base_url; 
     constructor (axios) {
         this.#axios = axios.create({});
+        this.#base_url = "http://localhost/api";
     }
 
-    get(...args) {
-        return this.#axios.get(...args)
+    JWTget(url, token) {
+        return this.#axios.get(this.#base_url+url, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+            });
+        
     }
 
-    put(...args) {
-        // --//--
+    get(url) {
+        return this.#axios.get(this.#base_url+url);
     }
 }

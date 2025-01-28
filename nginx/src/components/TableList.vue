@@ -1,6 +1,7 @@
 <script setup>
 import axios from "axios";
 import {ref, onMounted} from 'vue'
+import apiService from "../services/api";
 
 const days = ref([])
 const timeSlots = ref([])
@@ -10,13 +11,9 @@ function getEvents(day, time) {
       return events.value.filter(event => event.weekday === day && event.time === time);
 }; 
 async function getData() {
-      const { data } = await axios.get('http://localhost:4000/tables/', {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-          });
+      const { data } = await apiService.JWTget("/tables/",localStorage.getItem('token'));
       events.value = data;
-      const { data: enumData } = await axios.get('http://localhost:4000/enums/');
+      const { data: enumData } = await apiService.get("/enums/");
       console.log(enumData);
       days.value = enumData.days;
       timeSlots.value = enumData.timeSlots;
