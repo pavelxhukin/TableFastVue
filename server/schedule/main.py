@@ -139,19 +139,23 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 
 
 @app.get("/tables/")
-def read_todos(db: db_dependency, current_user: user_dependency):
+def return_tables(db: db_dependency, current_user: user_dependency):
     tables = db.query(Schedule).filter(Schedule.group_id == current_user.group_id).all()
     return tables
 
 @app.get("/user/")
-def read_todos(db: db_dependency, current_user: user_dependency):
+def return_user_name(db: db_dependency, current_user: user_dependency):
     return {"username":current_user.username}
 
 @app.get("/exit/")
-def read_todos(db: db_dependency, current_user: user_dependency):
+def return_exit(db: db_dependency, current_user: user_dependency):
     current_user.token = None
     db.commit()
     
     return {"exit":True}
+
+@app.get("/enums/")
+def get_enums():
+    return {"days": [item.value for item in WeekdayEnum], "timeSlots":[item.value for item in TimeSlots]}
 
 

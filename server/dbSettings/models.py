@@ -11,6 +11,13 @@ class WeekdayEnum(PyEnum):
     thursday = "Thursday"
     friday = "Friday"
 
+class TimeSlots(PyEnum): 
+    les1 = "10:00"
+    les2 = "11:00"
+    les3 = "12:00"
+    les4 = "13:00"
+    les5 = "14:00"
+    les6 = "15:00"
 
 class User(Base):
     __tablename__ = 'users'
