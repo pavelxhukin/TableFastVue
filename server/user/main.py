@@ -4,7 +4,6 @@ from database import SessionLocal, Base
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from models import *
-from config import connection_params
 from fastapi import FastAPI, Depends, HTTPException, status
 from typing import Annotated, Optional
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -22,6 +21,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
+# todo get from env file
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allows all origins

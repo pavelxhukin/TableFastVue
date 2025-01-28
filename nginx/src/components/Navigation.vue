@@ -1,8 +1,12 @@
 <template>
     <nav>
-        <h4>Wellcome back, {{ name }}!</h4>
-        <li><a href="/login">Login</a></li>
-        <li></li>
+        <h4>Wellcome back, {{ UserStore.userData.name? UserStore.userData.name : "student"}}!</h4>
+        <li>
+          <button class="btn" @click="onButtonClick()">
+            <span v-if="UserStore.userData.name">logOut</span>
+            <span v-else>login</span>
+          </button>
+        </li>
         <li><a href="/table">Schedule</a></li>
     </nav>
 </template>
@@ -10,15 +14,54 @@
 
 
 <script setup>
+import { useRouter } from 'vue-router';
+const router = useRouter()
+import axios from "axios";
 import {ref, onMounted} from 'vue'
 const name = ref('')
 
 onMounted(() => {
   name.value = localStorage.getItem('username') || 'student'
 })
+
+import { useUserStore } from '../stores/UserStore'
+const UserStore = useUserStore()
+
+async function onButtonClick(){
+  if (UserStore.userData.name){
+    try{ 
+      const data = await axios.get('http://localhost:4000/exit/', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+      });
+    }catch(error){
+      console.error(error)
+    }
+    
+    localStorage.removeItem('token');
+  }
+  router.push({path:'/'});
+}
+
 </script>
 
-<style>
+<style scoped>
+button {
+    border-radius: 0px;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    color: #ffffff;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    margin-bottom: 0px;
+  }
+button:hover {
+    background-color: #ffffff;
+    color: #000000;
+  }
 nav {
   list-style-type: none;
   margin: 0;

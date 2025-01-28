@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Integer
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, declared_attr, Mapped, mapped_column
 import os
 
-URL_DATABASE=os.getenv("DATABASE_URL")
+URL_DATABASE=os.getenv("URL_DATABASE")
 
 engine = create_engine(URL_DATABASE)
 

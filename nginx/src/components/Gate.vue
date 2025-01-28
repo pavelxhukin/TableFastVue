@@ -1,15 +1,18 @@
 <template>
     <h1>Loading...</h1>
 </template>
-  
-<script>
+
+<script setup>
 import axios from "axios";
+import {ref, onMounted} from 'vue'
 
-export default {
-  name: "Gate",
+import { useRouter } from 'vue-router';
+const router = useRouter()
 
-  methods: {
-    async getUser() {
+import { useUserStore } from '../stores/UserStore'
+const UserStore = useUserStore()
+
+async function getUser() {
         try {
             const { data } = await axios.get('http://localhost:4000/user/', {
         headers: {
@@ -17,20 +20,20 @@ export default {
         }
         });
         localStorage.setItem('username', data.username);
-        this.$router.push('/table')
+        UserStore.setUserName(data.username)
+        router.push({path:'/table'});
         }catch(error){
         console.error(error);
         localStorage.setItem('username', 'student');
-        this.$router.push('/login')
+        router.push({path:'/login'});
         }
         
-    },
-  
-  },
-  beforeMount() {
-    this.getUser();
-  },
-};
+    };
+
+onMounted(() => {
+  getUser()
+});
+
 </script>
 
 

@@ -3,6 +3,7 @@ import axios from "axios";
 
 export default {
   name: "TableList",
+  mixins: [],
   data() {
     return {
       days : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],

@@ -10,7 +10,7 @@ COPY server/user/pyproject.toml server/user/poetry.lock /app/
 RUN poetry install --no-root --no-dev
 
 COPY server/dbSettings/* /app/
-COPY server/user/main.py /
+COPY server/user/main.py /app/
 
 EXPOSE 8000
 
