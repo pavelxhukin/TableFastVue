@@ -1,9 +1,9 @@
 <template>
     <nav>
-        <h4>Wellcome back, {{ UserStore.userData.name? UserStore.userData.name : "student"}}!</h4>
+        <h4>Wellcome back, {{ username.name? username.name : "student"}}!</h4>
         <li>
           <button class="btn" @click="onButtonClick()">
-            <span v-if="UserStore.userData.name">logOut</span>
+            <span v-if="username.name">logOut</span>
             <span v-else>login</span>
           </button>
         </li>
@@ -25,7 +25,9 @@ onMounted(() => {
 })
 
 import { useUserStore } from '../stores/UserStore'
+import { storeToRefs } from 'pinia'
 const UserStore = useUserStore()
+const { userData : username } = storeToRefs(UserStore)
 
 async function onButtonClick(){
   if (UserStore.userData.name){
@@ -38,7 +40,7 @@ async function onButtonClick(){
     }catch(error){
       console.error(error)
     }
-    
+    UserStore.setUserName(null);
     localStorage.removeItem('token');
   }
   router.push({path:'/'});

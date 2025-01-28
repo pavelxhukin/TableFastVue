@@ -10,7 +10,9 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 
 import { useUserStore } from '../stores/UserStore'
+import { storeToRefs } from 'pinia'
 const UserStore = useUserStore()
+const { User } = storeToRefs(UserStore)
 
 async function getUser() {
         try {
@@ -19,12 +21,10 @@ async function getUser() {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
         });
-        localStorage.setItem('username', data.username);
         UserStore.setUserName(data.username)
         router.push({path:'/table'});
         }catch(error){
         console.error(error);
-        localStorage.setItem('username', 'student');
         router.push({path:'/login'});
         }
         

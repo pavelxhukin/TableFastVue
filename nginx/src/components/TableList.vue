@@ -1,4 +1,34 @@
-<script>
+<script setup>
+import axios from "axios";
+import {ref, onMounted} from 'vue'
+
+const days = ref([])
+const timeSlots = ref([])
+const events = ref([])
+
+function getEvents(day, time) {
+      return events.value.filter(event => event.weekday === day && event.time === time);
+}; 
+async function getData() {
+      const { data } = await axios.get('http://localhost:4000/tables/', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          });
+      events.value = data;
+      const { data: enumData } = await axios.get('http://localhost:4000/enums/');
+      console.log(enumData);
+      days.value = enumData.days;
+      timeSlots.value = enumData.timeSlots;
+};
+
+onMounted(()=>{
+  getData();
+});
+
+</script>
+
+<!-- <script>
 import axios from "axios";
 
 export default {
@@ -20,27 +50,11 @@ export default {
           });
       this.events = data;
     },
-  getEvents(day, time) {
-      return this.events.filter(event => event.weekday === day && event.time === time);
-  } 
   },
   beforeMount() {
     this.getRooms();
   },
 };
-</script>
-
-<!-- <script setup>
-import { onBeforeMount } from "vue";
-
-async function getRooms() {
-  const { data } = await axios.get("http://127.0.0.1:4000/tables");
-  this.schedule_data = data;
-}
-
-onBeforeMount(() => {
-  getRooms();
-});
 </script> -->
 
 <template>

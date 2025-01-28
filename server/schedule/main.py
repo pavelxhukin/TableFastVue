@@ -158,4 +158,3 @@ def return_exit(db: db_dependency, current_user: user_dependency):
 def get_enums():
     return {"days": [item.value for item in WeekdayEnum], "timeSlots":[item.value for item in TimeSlots]}
 
-
