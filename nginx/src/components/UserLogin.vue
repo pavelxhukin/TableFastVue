@@ -20,7 +20,8 @@
   
   <script>
   import axios from 'axios';
-  
+  import authService from '../services/auth';
+
   export default {
     name: 'UserLogin',
     data() {
@@ -36,7 +37,7 @@
           params.append('username', this.username);
           params.append('password', this.password);
   
-          const response = await axios.post('http://localhost:8000/token', params);
+          const response = await authService.post('/token', params);
           localStorage.setItem('token', response.data.access_token);
           this.$router.push('/');
         } catch (error) {

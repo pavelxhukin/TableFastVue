@@ -5,6 +5,7 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import apiService from "../services/api";
+import axios from "axios";
 
 import { useRouter } from 'vue-router';
 const router = useRouter()
@@ -16,12 +17,12 @@ const { User } = storeToRefs(UserStore)
 
 async function getUser() {
         try {
-            const { data } = await apiService.JWTget("/user/",localStorage.getItem('token'));
-            console.log(data)
-            UserStore.setUserName(data.username)
+            const { data: response } = await apiService.get("/user");
+            console.log("username must be here: "+response.username);
+            UserStore.setUserName(response.username);
             router.push({path:'/table'});
-            }catch(error){
-            console.error(error);
+        }catch(error){
+            console.error(error.body);
             router.push({path:'/login'});
         }
         

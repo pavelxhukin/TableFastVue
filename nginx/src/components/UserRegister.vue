@@ -21,7 +21,8 @@
   
   <script>
   import axios from 'axios';
-  
+  import authService from '../services/auth';
+
   export default {
     name: 'UserRegister',
     data() {
@@ -34,7 +35,7 @@
     methods: {
       async register() {
         try {
-          const response = await axios.post('http://localhost:8000/register', {
+          const response = await authService.post('/register', {
             username: this.username,
             userpassword: this.password,
             group_id: this.group_id

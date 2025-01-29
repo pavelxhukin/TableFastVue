@@ -17,6 +17,7 @@
 import { useRouter } from 'vue-router';
 const router = useRouter()
 import axios from "axios";
+import apiService from '../services/api';
 import {ref, onMounted} from 'vue'
 const name = ref('')
 
@@ -29,10 +30,10 @@ import { storeToRefs } from 'pinia'
 const UserStore = useUserStore()
 const { userData : username } = storeToRefs(UserStore)
 
-async function onButtonClick(){
+function onButtonClick(){
   if (UserStore.userData.name){
     try{ 
-      const { data } = await apiService.JWTget("/exit/",localStorage.getItem('token'));
+      const { data } = apiService.get("/exit/");
     }catch(error){
       console.error(error)
     }

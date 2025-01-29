@@ -11,9 +11,9 @@ function getEvents(day, time) {
       return events.value.filter(event => event.weekday === day && event.time === time);
 }; 
 async function getData() {
-      const { data } = await apiService.JWTget("/tables/",localStorage.getItem('token'));
+      const { data } = await apiService.get("/tables");
       events.value = data;
-      const { data: enumData } = await apiService.get("/enums/");
+      const { data: enumData } = await apiService.get("/enums");
       console.log(enumData);
       days.value = enumData.days;
       timeSlots.value = enumData.timeSlots;

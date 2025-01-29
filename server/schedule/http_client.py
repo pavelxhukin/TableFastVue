@@ -14,7 +14,7 @@ class RpcClient(HTTPClient):
     def call(self, token: str, ):
         with self.client() as client:
             response = client.post(
-                f"{self.base_url}/{self.endpoint}/",
+                f"{self.base_url}/{self.endpoint}",
                 json={"token":token}
             )
         

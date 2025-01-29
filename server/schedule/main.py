@@ -61,7 +61,7 @@ def get_db():
 
 
 
-@app.post("/add_group/")
+@app.post("/add_group")
 def add_group(group: GroupCreate, db: Session = Depends(get_db)):
     new_group = Group(description=group.description)
     db.add(new_group)
@@ -71,7 +71,7 @@ def add_group(group: GroupCreate, db: Session = Depends(get_db)):
     return {"message": "Группа добавлена", "group_id": new_group.id}
 
 
-@app.post("/add_schedule/")
+@app.post("/add_schedule")
 def add_schedule(schedule: ScheduleCreate, db: Session = Depends(get_db)):
     new_schedule = Schedule(
         time=schedule.time,
@@ -138,23 +138,23 @@ def get_user(db, username: str):
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
 
-@app.get("/tables/")
+@app.get("/tables")
 def return_tables(db: db_dependency, current_user: user_dependency):
     tables = db.query(Schedule).filter(Schedule.group_id == current_user.group_id).all()
     return tables
 
-@app.get("/user/")
+@app.get("/user")
 def return_user_name(db: db_dependency, current_user: user_dependency):
     return {"username":current_user.username}
 
-@app.get("/exit/")
+@app.get("/exit")
 def return_exit(db: db_dependency, current_user: user_dependency):
     current_user.token = None
     db.commit()
     
     return {"exit":True}
 
-@app.get("/enums/")
+@app.get("/enums")
 def get_enums():
     return {"days": [item.value for item in WeekdayEnum], "timeSlots":[item.value for item in TimeSlots]}
 

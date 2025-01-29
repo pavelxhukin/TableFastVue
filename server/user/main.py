@@ -57,7 +57,7 @@ def tokenDecode(token: str):
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-@app.post("/auth/")
+@app.post("/auth")
 def auth(db: db_dependency, token: TokenAuth):
     result = tokenDecode(token.token)
     if not result:

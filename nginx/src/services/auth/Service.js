@@ -6,7 +6,7 @@ export default class AuthService {
         this.#api = api;
     }
 
-    login(body) {
-        return this.#api.put(this.#prefix, { body });
+    async post(url, body={}) {
+        return await this.#api.post(this.#prefix+url,body);
     }
 }
